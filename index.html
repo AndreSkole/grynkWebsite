@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grynk – Fast, Modern Scripting for the Internet</title>
+  <meta name="description" content="Grynk is a modern, fast, and highly expressive scripting language built for web APIs, AI, automation, and real-time internet tasks. It feels fast like Rust and readable like Python, with absolutely zero unnecessary symbols." />
+  <meta name="theme-color" content="#0f0f1a" />
+
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind config: custom colors + dark mode
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            grybg: '#0f0f1a',
+            gryneon: '#00f0ff',
+            grylime: '#39ff14'
+          },
+          boxShadow: {
+            'neon-cyan': '0 0 25px rgba(0,240,255,0.4)',
+            'neon-lime': '0 0 25px rgba(57,255,20,0.35)'
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="/css/styles.css" />
+
+  <!-- Prism.js for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" integrity="sha512-kbT6TKzzvUVNfUN8qzTNR55nq4UQbmxhL9lQXbH6bxMtXiu9VCZ/vKUJg/EXi8Rigis7wFj/TNRwFEYV6qLcIA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-U5W2DAVBBusZT6FQ2tSjEN0t3mTQsxB7GdG6Pt17TRmd1cpLweivCJpVWvxX5G75iMTBnPRk7s4IfrUw5LZ5VA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js" integrity="sha512-1Ff51B4d9DL0cutvPjhI9C2Gv5gkEKpTdVIN5bshzQ2Kd5u+allycQa8eqOWll7Pt8SZwGLa1xiEbavkZHYr+g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- GitHub star button -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <!-- Prefers-color-scheme bootstrap for dark/light mode -->
+  <script>
+    (function () {
+      const stored = localStorage.getItem('grynk-theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (stored === 'dark' || (!stored && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+</head>
+<body class="bg-grybg text-slate-100 dark:bg-grybg dark:text-slate-100 min-h-screen relative overflow-x-hidden">
+  <!-- Background effects -->
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute -top-40 -left-40 w-80 h-80 bg-gryneon/20 blur-3xl rounded-full animate-pulse-slow"></div>
+    <div class="absolute top-1/3 -right-32 w-96 h-96 bg-grylime/15 blur-3xl rounded-full animate-pulse-slower"></div>
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60rem] h-[60rem] bg-[radial-gradient(circle_at_top,_rgba(0,240,255,0.12),_transparent_60%)]"></div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-30 backdrop-blur border-b border-slate-800/80 bg-black/40">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-grylime to-gryneon shadow-neon-cyan flex items-center justify-center text-xs font-bold tracking-widest">
+          GX
+        </div>
+        <div>
+          <div class="font-semibold tracking-wide">Grynk</div>
+          <div class="text-xs text-slate-400">The Scripting Language for the Modern Internet</div>
+        </div>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#what" class="nav-link text-slate-300 hover:text-gryneon transition-colors">What</a>
+        <a href="#features" class="nav-link text-slate-300 hover:text-gryneon transition-colors">Features</a>
+        <a href="#syntax" class="nav-link text-slate-300 hover:text-gryneon transition-colors">Syntax</a>
+        <a href="#install" class="nav-link text-slate-300 hover:text-gryneon transition-colors">Install</a>
+        <a href="#api" class="nav-link text-slate-300 hover:text-gryneon transition-colors">API</a>
+        <a href="#community" class="nav-link text-slate-300 hover:text-gryneon transition-colors">Community</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <button id="theme-toggle" class="relative inline-flex h-8 w-16 items-center rounded-full border border-slate-700 bg-slate-900/80 hover:border-gryneon/70 transition-colors">
+          <span class="sr-only">Toggle dark mode</span>
+          <span class="toggle-knob absolute left-1 h-6 w-6 rounded-full bg-gryneon shadow-neon-cyan transition-all flex items-center justify-center text-[0.6rem] font-bold text-slate-900">GX</span>
+          <span class="w-full flex justify-between px-3 text-[0.65rem] text-slate-400">
+            <span>Dark</span>
+            <span>Light</span>
+          </span>
+        </button>
+        <a href="#install" class="hidden sm:inline-flex items-center gap-2 rounded-full border border-grylime/70 bg-grylime/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-grylime hover:bg-grylime/20 hover:shadow-neon-lime transition-all">
+          Get Grynk
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 pb-24">
+    <!-- Hero -->
+    <section id="hero" class="pt-16 pb-20 md:pt-20 md:pb-24 flex flex-col md:flex-row items-center gap-10 reveal">
+      <div class="md:w-1/2 space-y-6">
+        <div class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/60 px-3 py-1 text-xs text-slate-300">
+          <span class="inline-flex h-2 w-2 rounded-full bg-grylime animate-pulse"></span>
+          <span>Powerful. Fast. Alive.</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">
+          <span class="block text-slate-50 mb-1">Grynk</span>
+          <span class="block text-transparent bg-clip-text bg-gradient-to-r from-grylime via-gryneon to-sky-400">
+            <span id="hero-typing" class="whitespace-nowrap border-r-2 border-gryneon pr-1"></span>
+          </span>
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base max-w-xl">
+          Grynk er et moderne, raskt og svært uttrykksfullt skriptspråk bygget for web-API-er, AI, automasjon og sanntidsoppgaver på nettet. 
+          Det føles raskt som Rust og lesbart som Python – uten unødvendige symboler, med <strong>null imports</strong> via det globale <code class="text-gryneon">gx</code>-objektet.
+        </p>
+        <div class="flex flex-wrap items-center gap-4">
+          <a href="/downloads/Grynk_Windows_Installer.exe" download class="inline-flex items-center gap-2 rounded-full bg-grylime px-6 py-2.5 text-sm font-semibold text-slate-900 shadow-neon-lime hover:shadow-neon-cyan hover:-translate-y-0.5 transition-all">
+            Download for Windows (.exe)
+          </a>
+          <a href="#syntax" class="inline-flex items-center gap-2 text-sm text-gryneon hover:text-sky-300">
+            Explore the syntax
+            <span aria-hidden="true">↴</span>
+          </a>
+        </div>
+        <div class="flex flex-wrap gap-3 text-[0.7rem] text-slate-400">
+          <span class="px-2 py-1 rounded-full border border-slate-700/80 bg-black/40">Zero imports – <code class="text-gryneon">gx.*</code> for alt</span>
+          <span class="px-2 py-1 rounded-full border border-slate-700/80 bg-black/40">Built-in CLI &amp; REPL</span>
+          <span class="px-2 py-1 rounded-full border border-slate-700/80 bg-black/40">GxGUI desktop apps</span>
+        </div>
+      </div>
+      <div class="md:w-1/2 relative">
+        <div class="relative rounded-2xl border border-slate-700/80 bg-black/60 shadow-neon-cyan p-4 backdrop-blur">
+          <div class="flex items-center justify-between mb-3 text-xs text-slate-400">
+            <span class="flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+              <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span class="ml-2 text-slate-300">grynk repl</span>
+            </span>
+            <span>fast like Rust, readable like Python</span>
+          </div>
+          <pre class="text-[0.7rem] leading-relaxed font-mono text-slate-200">
+<span class="text-gryneon">&gt;&gt;&gt;</span> gx.banner("GRYNK", "cyan")
+<span class="text-grylime">╔══════════════════════╗
+║        GRYNK        ║
+╚══════════════════════╝</span>
+
+<span class="text-gryneon">&gt;&gt;&gt;</span> let joke = gx.get("https://official-joke-api.appspot.com/random_joke").json
+<span class="text-gryneon">&gt;&gt;&gt;</span> say "Here is a joke: {joke.get('setup')} - {joke.get('punchline')}"
+Here is a joke: Why do programmers prefer dark mode? - Because light attracts bugs.
+
+<span class="text-gryneon">&gt;&gt;&gt;</span> [3, 1, 4, 1, 5, 9] |> gx.sort() |> gx.unique() |> say
+[1, 3, 4, 5, 9]</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- What is Grynk -->
+    <section id="what" class="py-12 border-t border-slate-800/70 reveal">
+      <div class="grid md:grid-cols-2 gap-8 items-start">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-4">What is Grynk?</h2>
+          <p class="text-slate-300 text-sm md:text-base mb-4">
+            Grynk er <strong>"The Scripting Language for the Modern Internet"</strong> – et raskt, uttrykksfullt språk som 
+            prioriterer lesbarhet, produktivitet og kraftige innebygde verktøy. Det er bygget for web-API-er, AI-agenter, automasjon, 
+            sanntidsoppgaver og moderne desktop-GUI med GxGUI.
+          </p>
+          <ul class="space-y-2 text-sm text-slate-300">
+            <li class="flex gap-2">
+              <span class="text-grylime mt-1">◆</span>
+              <span>Føles <strong>raskt som Rust</strong>, men <strong>lettlest som Python</strong>.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-grylime mt-1">◆</span>
+              <span><strong>Null imports</strong> – alt via det globale <code class="text-gryneon">gx</code>-objektet.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-grylime mt-1">◆</span>
+              <span>Innebygd <strong>CLI, REPL, prosjekt-scaffolding og VS Code-extension</strong>.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-grylime mt-1">◆</span>
+              <span>Fjerner unødvendig boilerplate og symbolstøy – kun det du trenger for å bygge.</span>
+            </li>
+          </ul>
+        </div>
+        <div class="space-y-4 text-sm text-slate-300">
+          <h3 class="text-lg font-semibold mb-2">Built for the modern stack</h3>
+          <p>
+            Grynk leveres med en omfattende verktøykasse direkte i <code class="text-gryneon">gx</code>: HTTP-klient, AI-helpers, 
+            filsystem, crypto, tidsfunksjoner, datastrømmer, terminalverktøy, system-kommandoer og mer – uten ett eneste <em>import</em>.
+          </p>
+          <p>
+            Med den innebygde <strong>GxGUI-motoren</strong> kan du lage skrivebordsapplikasjoner i noen få linjer, drevet av 
+            CustomTkinter for en moderne look out-of-the-box.
+          </p>
+          <p>
+            Installeres enkelt via en offisiell Windows-installer, eller bygges fra kildekode / bruk standalone-binary på Linux og macOS.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-14 border-t border-slate-800/70 reveal">
+      <div class="flex items-center justify-between gap-4 mb-6">
+        <h2 class="text-2xl md:text-3xl font-bold">Features that feel alive</h2>
+        <span class="text-xs uppercase tracking-[0.2em] text-slate-500">Hover · Click · Explore</span>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Feature card template -->
+        <article class="feature-card group">
+          <button class="feature-header" data-accordion="gx">
+            <div>
+              <h3 class="font-semibold text-sm mb-1">Zero-import global <code class="text-gryneon">gx</code></h3>
+              <p class="text-xs text-slate-400">Alt du trenger – web, AI, filer, crypto – på ett objekt.</p>
+            </div>
+            <span class="feature-chevron">+</span>
+          </button>
+          <div class="feature-body" id="feature-body-gx">
+            <ul class="text-xs text-slate-300 space-y-1 mb-3">
+              <li><strong>Web</strong>: <code>gx.get()</code>, <code>gx.post()</code>, <code>gx.scrape()</code></li>
+              <li><strong>AI</strong>: <code>gx.ai()</code>, <code>gx.ai_summarize()</code>, <code>gx.ai_code()</code></li>
+              <li><strong>Files</strong>: <code>gx.read()</code>, <code>gx.write()</code>, <code>gx.read_json()</code></li>
+              <li><strong>System</strong>: <code>gx.run()</code>, <code>gx.env()</code>, <code>gx.platform()</code></li>
+            </ul>
+            <button class="copy-btn" data-copy-target="code-gx-omn">
+              Copy example
+            </button>
+          </div>
+        </article>
+
+        <article class="feature-card group">
+          <button class="feature-header" data-accordion="cli">
+            <div>
+              <h3 class="font-semibold text-sm mb-1">Built-in CLI &amp; REPL</h3>
+              <p class="text-xs text-slate-400">Kjør skript, start REPL, bygg prosjekter – ingen ekstra verktøy.</p>
+            </div>
+            <span class="feature-chevron">+</span>
+          </button>
+          <div class="feature-body" id="feature-body-cli">
+            <ul class="text-xs text-slate-300 space-y-1 mb-3">
+              <li><code>grynk run app.grk</code> – kjør et skript</li>
+              <li><code>grynk repl</code> – interaktiv multi-line REPL</li>
+              <li><code>grynk new myproject</code> – scaffold nytt prosjekt</li>
+              <li><code>grynk help</code> – full språk- og API-reference</li>
+            </ul>
+            <button class="copy-btn" data-copy-target="code-cli-basic">
+              Copy CLI usage
+            </button>
+          </div>
+        </article>
+
+        <article class="feature-card group">
+          <button class="feature-header" data-accordion="pipeline">
+            <div>
+              <h3 class="font-semibold text-sm mb-1">Data pipelines with <code class="text-gryneon">|&gt;</code></h3>
+              <p class="text-xs text-slate-400">Transformer data med lesbare, funksjonelle kjeder.</p>
+            </div>
+            <span class="feature-chevron">+</span>
+          </button>
+          <div class="feature-body" id="feature-body-pipeline">
+            <p class="text-xs text-slate-300 mb-3">
+              Kombiner sortering, mapping, filtrering og utskrift i én flyt – perfekt for data- og API-responser.
+            </p>
+            <button class="copy-btn" data-copy-target="code-pipeline-main">
+              Copy pipeline
+            </button>
+          </div>
+        </article>
+
+        <article class="feature-card group">
+          <button class="feature-header" data-accordion="gxgui">
+            <div>
+              <h3 class="font-semibold text-sm mb-1">GxGUI Desktop UI</h3>
+              <p class="text-xs text-slate-400">Lag moderne skrivebordsapper med få linjer kode.</p>
+            </div>
+            <span class="feature-chevron">+</span>
+          </button>
+          <div class="feature-body" id="feature-body-gxgui">
+            <p class="text-xs text-slate-300 mb-3">
+              GxGUI bruker CustomTkinter under panseret for å gi moderne look og enkel API for vinduer, knapper, labels og inputs.
+            </p>
+            <button class="copy-btn" data-copy-target="code-gui-basic">
+              Copy GUI example
+            </button>
+          </div>
+        </article>
+
+        <article class="feature-card group">
+          <button class="feature-header" data-accordion="http">
+            <div>
+              <h3 class="font-semibold text-sm mb-1">HTTP + Web helpers</h3>
+              <p class="text-xs text-slate-400">Bygg API-klienter og scrapers uten ekstra biblioteker.</p>
+            </div>
+            <span class="feature-chevron">+</span>
+          </button>
+          <div class="feature-body" id="feature-body-http">
+            <ul class="text-xs text-slate-300 space-y-1 mb-3">
+              <li><code>gx.get(url).json</code> – rask JSON-henting</li>
+              <li><code>gx.post(url, data)</code> – POST-requests</li>
+              <li><code>gx.scrape(url, selector)</code> – HTML-scraping</li>
+            </ul>
+            <button class="copy-btn" data-copy-target="code-http-joke">
+              Copy HTTP joke
+            </button>
+          </div>
+        </article>
+
+        <article class="feature-card group">
+          <button class="feature-header" data-accordion="ai">
+            <div>
+              <h3 class="font-semibold text-sm mb-1">AI-native scripting</h3>
+              <p class="text-xs text-slate-400">Bygg AI-agenter og tools direkte i språket.</p>
+            </div>
+            <span class="feature-chevron">+</span>
+          </button>
+          <div class="feature-body" id="feature-body-ai">
+            <ul class="text-xs text-slate-300 space-y-1 mb-3">
+              <li><code>gx.ai(prompt)</code> – kjør raske prompt-kall</li>
+              <li><code>gx.ai_summarize(text)</code> – kondenser tekst</li>
+              <li><code>gx.ai_code(code)</code> – AI-hjelp for kode</li>
+            </ul>
+            <button class="copy-btn" data-copy-target="code-ai-basic">
+              Copy AI example
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Syntax & Examples with playgrounds -->
+    <section id="syntax" class="py-14 border-t border-slate-800/70 reveal">
+      <div class="flex items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-1">Syntax &amp; Live Examples</h2>
+          <p class="text-sm text-slate-300">Rediger Grynk-kode, kjør mock-kjøringer i nettleseren, og se hvordan språket føles.</p>
+        </div>
+        <span class="text-[0.65rem] uppercase tracking-[0.2em] text-slate-500">Editable playgrounds</span>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- 1: Variables -->
+        <div class="playground-card">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-semibold">Variables: immutable / mutable</h3>
+            <button class="copy-btn" data-copy-target="code-vars-basic">Copy code</button>
+          </div>
+          <pre class="language-javascript text-xs rounded-md bg-slate-900/70 border border-slate-800 overflow-auto mb-3"><code id="code-vars-basic" class="language-javascript">let immutable_name = "Grynk"
+mut speed = 100
+speed += 50
+
+fn calculate(a, b) {
+    return a ** b
+}
+say "Speed is {speed}, pow is {calculate(2, 10)}"</code></pre>
+          <div class="playground-runner">
+            <textarea class="playground-input" data-playground-id="vars">let immutable_name = "Grynk"
+mut speed = 100
+speed += 50
+
+fn calculate(a, b) {
+    return a ** b
+}
+say "Speed is {speed}, pow is {calculate(2, 10)}"</textarea>
+            <button class="run-btn" data-run-target="vars">Run mock</button>
+            <div class="playground-output" id="output-vars" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <!-- 2: Control flow & functions -->
+        <div class="playground-card">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-semibold">Functions &amp; control flow</h3>
+            <button class="copy-btn" data-copy-target="code-ctrl-basic">Copy code</button>
+          </div>
+          <pre class="language-javascript text-xs rounded-md bg-slate-900/70 border border-slate-800 overflow-auto mb-3"><code id="code-ctrl-basic" class="language-javascript">fn label_size(x) {
+    if x &gt; 50 {
+        return "Huge"
+    } elif x &gt; 5 {
+        return "Medium"
+    } else {
+        return "Small"
+    }
+}
+
+let nums = [1, 2, 3]
+for item in nums {
+    say "Item {item} is {label_size(item * 10)}"
+}</code></pre>
+          <div class="playground-runner">
+            <textarea class="playground-input" data-playground-id="control">fn label_size(x) {
+    if x &gt; 50 {
+        return "Huge"
+    } elif x &gt; 5 {
+        return "Medium"
+    } else {
+        return "Small"
+    }
+}
+
+let nums = [1, 2, 3]
+for item in nums {
+    say "Item {item} is {label_size(item * 10)}"
+}</textarea>
+            <button class="run-btn" data-run-target="control">Run mock</button>
+            <div class="playground-output" id="output-control" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <!-- 3: Pipeline -->
+        <div class="playground-card">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-semibold">Data pipeline with <code>|&gt;</code></h3>
+            <button class="copy-btn" data-copy-target="code-pipeline-main">Copy code</button>
+          </div>
+          <pre class="language-javascript text-xs rounded-md bg-slate-900/70 border border-slate-800 overflow-auto mb-3"><code id="code-pipeline-main" class="language-javascript">[1, 5, 3, 7, 2]
+    |&gt; gx.sort()
+    |&gt; gx.map(x =&gt; x * 2)
+    |&gt; gx.join(", ")
+    |&gt; say</code></pre>
+          <div class="playground-runner">
+            <textarea class="playground-input" data-playground-id="pipeline">[1, 5, 3, 7, 2]
+    |&gt; gx.sort()
+    |&gt; gx.map(x =&gt; x * 2)
+    |&gt; gx.join(", ")
+    |&gt; say</textarea>
+            <button class="run-btn" data-run-target="pipeline">Run mock</button>
+            <div class="playground-output" id="output-pipeline" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <!-- 4: HTTP joke -->
+        <div class="playground-card">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-semibold">HTTP joke fetch</h3>
+            <button class="copy-btn" data-copy-target="code-http-joke">Copy code</button>
+          </div>
+          <pre class="language-javascript text-xs rounded-md bg-slate-900/70 border border-slate-800 overflow-auto mb-3"><code id="code-http-joke" class="language-javascript">gx.banner("GRYNK APP", "cyan")
+
+let joke = gx.get("https://official-joke-api.appspot.com/random_joke").json
+say "Here is a joke: {joke.get('setup')} - {joke.get('punchline')}"</code></pre>
+          <div class="playground-runner">
+            <textarea class="playground-input" data-playground-id="http">gx.banner("GRYNK APP", "cyan")
+
+let joke = gx.get("https://official-joke-api.appspot.com/random_joke").json
+say "Here is a joke: {joke.get('setup')} - {joke.get('punchline')}"</textarea>
+            <button class="run-btn" data-run-target="http">Run mock</button>
+            <div class="playground-output" id="output-http" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <!-- 5: AI prompt -->
+        <div class="playground-card">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-semibold">Simple AI prompt</h3>
+            <button class="copy-btn" data-copy-target="code-ai-basic">Copy code</button>
+          </div>
+          <pre class="language-javascript text-xs rounded-md bg-slate-900/70 border border-slate-800 overflow-auto mb-3"><code id="code-ai-basic" class="language-javascript">let idea = gx.ai("Brainstorm 3 app ideas using Grynk.")
+say idea</code></pre>
+          <div class="playground-runner">
+            <textarea class="playground-input" data-playground-id="ai">let idea = gx.ai("Brainstorm 3 app ideas using Grynk.")
+say idea</textarea>
+            <button class="run-btn" data-run-target="ai">Run mock</button>
+            <div class="playground-output" id="output-ai" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <!-- 6: GUI window -->
+        <div class="playground-card">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-semibold">Basic GxGUI window</h3>
+            <button class="copy-btn" data-copy-target="code-gui-basic">Copy code</button>
+          </div>
+          <pre class="language-javascript text-xs rounded-md bg-slate-900/70 border border-slate-800 overflow-auto mb-3"><code id="code-gui-basic" class="language-javascript">let win = gx.window("Grynk App", 400, 300)
+let lbl = gx.label("Welcome to Grynk!")
+let count = 0
+
+fn on_click() {
+    mut count = count + 1
+    lbl.set("Clicked {count} times!")
+}
+
+gx.button("Click Me!", on_click)
+gx.gui_run()</code></pre>
+          <div class="playground-runner">
+            <textarea class="playground-input" data-playground-id="gui">let win = gx.window("Grynk App", 400, 300)
+let lbl = gx.label("Welcome to Grynk!")
+let count = 0
+
+fn on_click() {
+    mut count = count + 1
+    lbl.set("Clicked {count} times!")
+}
+
+gx.button("Click Me!", on_click)
+gx.gui_run()</textarea>
+            <button class="run-btn" data-run-target="gui">Run mock</button>
+            <div class="playground-output" id="output-gui" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <!-- 7: Filesystem -->
+        <div class="playground-card">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-semibold">Filesystem &amp; JSON</h3>
+            <button class="copy-btn" data-copy-target="code-fs-basic">Copy code</button>
+          </div>
+          <pre class="language-javascript text-xs rounded-md bg-slate-900/70 border border-slate-800 overflow-auto mb-3"><code id="code-fs-basic" class="language-javascript">let data = gx.read_json("config.json")
+data["updated_at"] = gx.now()
+gx.write("config.out.json", data)
+say "Config written!"</code></pre>
+          <div class="playground-runner">
+            <textarea class="playground-input" data-playground-id="fs">let data = gx.read_json("config.json")
+data["updated_at"] = gx.now()
+gx.write("config.out.json", data)
+say "Config written!"</textarea>
+            <button class="run-btn" data-run-target="fs">Run mock</button>
+            <div class="playground-output" id="output-fs" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <!-- 8: Crypto/UUID -->
+        <div class="playground-card">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-semibold">Crypto &amp; UUID</h3>
+            <button class="copy-btn" data-copy-target="code-crypto-basic">Copy code</button>
+          </div>
+          <pre class="language-javascript text-xs rounded-md bg-slate-900/70 border border-slate-800 overflow-auto mb-3"><code id="code-crypto-basic" class="language-javascript">let id = gx.uuid()
+let hash = gx.sha256("grynk")
+say "Session {id} has hash {hash}"</code></pre>
+          <div class="playground-runner">
+            <textarea class="playground-input" data-playground-id="crypto">let id = gx.uuid()
+let hash = gx.sha256("grynk")
+say "Session {id} has hash {hash}"</textarea>
+            <button class="run-btn" data-run-target="crypto">Run mock</button>
+            <div class="playground-output" id="output-crypto" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Installation / Get Started -->
+    <section id="install" class="py-14 border-t border-slate-800/70 reveal">
+      <div class="grid md:grid-cols-[1.1fr,0.9fr] gap-8 items-start">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-3">Install &amp; Get Started</h2>
+          <p class="text-sm text-slate-300 mb-4">
+            Den anbefalte måten å installere Grynk på er via den offisielle Windows-installereren. Den setter 
+            automatisk opp CLI-verktøyet og installerer VS Code-extension slik at du får ikoner og syntax highlighting umiddelbart.
+          </p>
+          <ol class="list-decimal list-inside text-sm text-slate-300 space-y-1 mb-4">
+            <li>Last ned <strong>Grynk_Windows_Installer.exe</strong> via knappen under.</li>
+            <li>Kjør installasjonsfilen og klikk deg gjennom veiviseren.</li>
+            <li>Åpne en terminal og kjør <code class="text-gryneon">grynk repl</code> eller <code class="text-gryneon">grynk run app.grk</code>.</li>
+          </ol>
+          <a href="/downloads/Grynk_Windows_Installer.exe" download class="inline-flex items-center gap-2 rounded-full bg-grylime px-6 py-2.5 text-sm font-semibold text-slate-900 shadow-neon-lime hover:shadow-neon-cyan hover:-translate-y-0.5 transition-all mb-4">
+            Download for Windows (.exe)
+          </a>
+
+          <div class="text-xs text-slate-400">
+            <p class="mb-1">Linux &amp; macOS kan installere Grynk på to måter:</p>
+            <ul class="list-disc list-inside space-y-1">
+              <li><strong>Standalone-binary</strong>: Last ned <code>grynk</code>-fila fra Releases, gjør den kjørbar og legg den i <code>/usr/local/bin</code>.</li>
+              <li><strong>Fra kildekode</strong>: Klon repoet og kjør <code>setup.sh</code> for å få en global <code>grynk</code>-kommando.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="space-y-4 text-xs">
+          <div class="snippet-card">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-semibold">Create &amp; run your first script</span>
+              <button class="copy-btn" data-copy-target="code-cli-basic">Copy</button>
+            </div>
+            <pre class="language-bash text-[0.7rem] rounded-md bg-slate-950/80 border border-slate-800 overflow-auto"><code id="code-cli-basic" class="language-bash"># Create a new file
+echo "# Run a quick AI prompt and fetch from the web!" &gt; app.grk
+
+# Run your script
+grynk run app.grk
+
+# Start the REPL
+grynk repl
+
+# Scaffold a new project
+grynk new myproject</code></pre>
+          </div>
+
+          <div class="snippet-card">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-semibold">Install from standalone binary (Linux)</span>
+              <button class="copy-btn" data-copy-target="code-install-linux">Copy</button>
+            </div>
+            <pre class="language-bash text-[0.7rem] rounded-md bg-slate-950/80 border border-slate-800 overflow-auto"><code id="code-install-linux" class="language-bash">chmod +x grynk
+sudo mv grynk /usr/local/bin/
+
+# Now you can run:
+grynk help
+grynk repl
+grynk run app.grk</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- API Quick Reference -->
+    <section id="api" class="py-14 border-t border-slate-800/70 reveal">
+      <div class="flex items-center justify-between gap-4 mb-4">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-1">API Quick Reference</h2>
+          <p class="text-sm text-slate-300">Et utvalg av de viktigste <code class="text-gryneon">gx.*</code>-metodene. Skriv for å filtrere.</p>
+        </div>
+        <div class="w-40">
+          <input id="api-search" type="text" placeholder="Search gx.*" class="w-full rounded-full bg-slate-900/80 border border-slate-700 px-3 py-1.5 text-xs placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-gryneon" />
+        </div>
+      </div>
+      <div class="overflow-x-auto rounded-xl border border-slate-800/80 bg-black/50 text-xs">
+        <table class="min-w-full text-left" id="api-table">
+          <thead class="bg-slate-900/70 text-slate-300">
+            <tr>
+              <th class="px-4 py-2 font-semibold">Method</th>
+              <th class="px-4 py-2 font-semibold">Category</th>
+              <th class="px-4 py-2 font-semibold">Description</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 text-slate-200">
+            <tr>
+              <td class="px-4 py-2"><code>gx.get(url)</code></td>
+              <td class="px-4 py-2">Web / HTTP</td>
+              <td class="px-4 py-2">Fetch JSON or text from an HTTP endpoint.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.post(url, data)</code></td>
+              <td class="px-4 py-2">Web / HTTP</td>
+              <td class="px-4 py-2">Send POST requests with body data.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.scrape(url, selector)</code></td>
+              <td class="px-4 py-2">Web / Scraping</td>
+              <td class="px-4 py-2">Scrape HTML and extract elements.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.ai(prompt)</code></td>
+              <td class="px-4 py-2">AI</td>
+              <td class="px-4 py-2">Run a free-form AI prompt and return text.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.ai_summarize(text)</code></td>
+              <td class="px-4 py-2">AI</td>
+              <td class="px-4 py-2">Summarize long text using AI.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.ai_code(code)</code></td>
+              <td class="px-4 py-2">AI</td>
+              <td class="px-4 py-2">Get AI assistance for code.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.uuid()</code></td>
+              <td class="px-4 py-2">Crypto</td>
+              <td class="px-4 py-2">Generate a random UUID.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.sha256(text)</code></td>
+              <td class="px-4 py-2">Crypto</td>
+              <td class="px-4 py-2">Compute a SHA-256 hash of the text.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.hash(text)</code></td>
+              <td class="px-4 py-2">Crypto</td>
+              <td class="px-4 py-2">Hash helper (implementation-defined).</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.read(path)</code></td>
+              <td class="px-4 py-2">Filesystem</td>
+              <td class="px-4 py-2">Read a file as text.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.write(path, data)</code></td>
+              <td class="px-4 py-2">Filesystem</td>
+              <td class="px-4 py-2">Write data to a file.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.read_json(path)</code></td>
+              <td class="px-4 py-2">Filesystem</td>
+              <td class="px-4 py-2">Read and parse a JSON file.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.now()</code></td>
+              <td class="px-4 py-2">Time</td>
+              <td class="px-4 py-2">Get current time.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.sleep(ms)</code></td>
+              <td class="px-4 py-2">Time</td>
+              <td class="px-4 py-2">Pause execution for given milliseconds.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.sort(list)</code></td>
+              <td class="px-4 py-2">Data</td>
+              <td class="px-4 py-2">Sort a list.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.unique(list)</code></td>
+              <td class="px-4 py-2">Data</td>
+              <td class="px-4 py-2">Remove duplicate values from a list.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.map(fn)</code></td>
+              <td class="px-4 py-2">Data</td>
+              <td class="px-4 py-2">Map a function over a list.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.filter(fn)</code></td>
+              <td class="px-4 py-2">Data</td>
+              <td class="px-4 py-2">Filter a list by predicate.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.banner(text, color)</code></td>
+              <td class="px-4 py-2">Terminal</td>
+              <td class="px-4 py-2">Print a stylized banner with a color.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.table(data)</code></td>
+              <td class="px-4 py-2">Terminal</td>
+              <td class="px-4 py-2">Render data as a terminal table.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.clear()</code></td>
+              <td class="px-4 py-2">Terminal</td>
+              <td class="px-4 py-2">Clear the terminal screen.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.run(cmd)</code></td>
+              <td class="px-4 py-2">System</td>
+              <td class="px-4 py-2">Run a system command.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.env(name)</code></td>
+              <td class="px-4 py-2">System</td>
+              <td class="px-4 py-2">Read an environment variable.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.platform()</code></td>
+              <td class="px-4 py-2">System</td>
+              <td class="px-4 py-2">Get information about the current platform.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.window(title, w, h)</code></td>
+              <td class="px-4 py-2">GxGUI</td>
+              <td class="px-4 py-2">Create a new GUI window.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.label(text)</code></td>
+              <td class="px-4 py-2">GxGUI</td>
+              <td class="px-4 py-2">Add a label to the window.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.button(text, fn)</code></td>
+              <td class="px-4 py-2">GxGUI</td>
+              <td class="px-4 py-2">Add a button that runs a function on click.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.entry(placeholder)</code></td>
+              <td class="px-4 py-2">GxGUI</td>
+              <td class="px-4 py-2">Add a text input field.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2"><code>gx.gui_run()</code></td>
+              <td class="px-4 py-2">GxGUI</td>
+              <td class="px-4 py-2">Start the GUI event loop.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Community -->
+    <section id="community" class="py-14 border-t border-slate-800/70 reveal">
+      <div class="grid md:grid-cols-[1.1fr,0.9fr] gap-8 items-center">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-3">Join the Grynk ecosystem</h2>
+          <p class="text-sm text-slate-300 mb-3">
+            Grynk er et åpent kildekodeprosjekt – språket, CLI, GxGUI, og installer-verktøyene utvikles i fellesskap på GitHub.
+          </p>
+          <ul class="text-sm text-slate-300 space-y-1 mb-4">
+            <li>⭐ Gi prosjektet en stjerne for å vise støtte.</li>
+            <li>🐛 Rapporter bugs eller foreslå nye <code>gx.*</code>-helpers.</li>
+            <li>🧱 Bidra med eksempler, dokumentasjon eller verktøy rundt språket.</li>
+          </ul>
+          <a href="https://github.com/AndreSkole/Grynk" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full border border-gryneon px-4 py-2 text-xs font-semibold text-gryneon hover:bg-gryneon/10 hover:shadow-neon-cyan transition-all">
+            Visit the Grynk GitHub repo
+          </a>
+        </div>
+        <div class="space-y-4">
+          <div class="snippet-card">
+            <span class="text-xs text-slate-400 mb-1 block">GitHub</span>
+            <a class="github-button" href="https://github.com/AndreSkole/Grynk" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star Grynk on GitHub">Star</a>
+          </div>
+
+          <!-- Fake REPL -->
+          <div class="snippet-card">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-semibold text-sm">Try the fake Grynk REPL</span>
+              <span class="text-[0.65rem] text-slate-500">Mocked output</span>
+            </div>
+            <div class="rounded-md bg-slate-950/80 border border-slate-800 px-3 py-2 font-mono text-[0.7rem]">
+              <div id="repl-output" class="min-h-[80px] mb-2 text-slate-200">
+                &gt;&gt;&gt; Type <span class="text-gryneon">gx.ai("hello")</span>, <span class="text-grylime">gx.get("https://...")</span> or a pipeline.
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-gryneon">&gt;&gt;&gt;</span>
+                <input id="repl-input" type="text" class="flex-1 bg-transparent border-none outline-none text-slate-100 placeholder:text-slate-500" placeholder='say "Hello from Grynk!"' />
+                <button id="repl-run" class="text-[0.7rem] px-2 py-1 rounded border border-gryneon text-gryneon hover:bg-gryneon/10">Run</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-black/60">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+      <div>
+        <span>&copy; <span id="footer-year"></span> Grynk.</span>
+        <span class="ml-1">Made with love for the modern internet.</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="https://github.com/AndreSkole/Grynk" target="_blank" rel="noopener" class="hover:text-gryneon">GitHub</a>
+        <span class="text-slate-600">·</span>
+        <span>Cross-platform – Windows installer, Linux/macOS binaries planned.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JS -->
+  <script src="/js/main.js" defer></script>
+</body>
+</html>
+
