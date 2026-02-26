@@ -108,16 +108,19 @@
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">
           <span class="block text-slate-50 mb-1">Grynk</span>
           <span class="block text-transparent bg-clip-text bg-gradient-to-r from-grylime via-gryneon to-sky-400">
-            <span id="hero-typing" class="whitespace-nowrap border-r-2 border-gryneon pr-1"></span>
+            <span id="hero-typing" class="border-r-2 border-gryneon pr-1"></span>
           </span>
         </h1>
         <p class="text-slate-300 text-sm sm:text-base max-w-xl">
-          Grynk er et moderne, raskt og svært uttrykksfullt skriptspråk bygget for web-API-er, AI, automasjon og sanntidsoppgaver på nettet. 
-          Det føles raskt som Rust og lesbart som Python – uten unødvendige symboler, med <strong>null imports</strong> via det globale <code class="text-gryneon">gx</code>-objektet.
+          Grynk is a modern, fast, and highly expressive scripting language built for web APIs, AI, automation, and real-time internet tasks.
+          It feels fast like Rust and readable like Python – with absolutely zero unnecessary symbols and <strong>zero imports</strong> thanks to the global <code class="text-gryneon">gx</code> object.
         </p>
         <div class="flex flex-wrap items-center gap-4">
           <a href="/downloads/Grynk_Windows_Installer.exe" download class="inline-flex items-center gap-2 rounded-full bg-grylime px-6 py-2.5 text-sm font-semibold text-slate-900 shadow-neon-lime hover:shadow-neon-cyan hover:-translate-y-0.5 transition-all">
             Download for Windows (.exe)
+          </a>
+          <a href="/downloads/grynk" download class="inline-flex items-center gap-2 rounded-full border border-gryneon/70 bg-gryneon/5 px-4 py-2 text-xs font-semibold text-gryneon hover:bg-gryneon/15 hover:shadow-neon-cyan transition-all">
+            Standalone binary (Linux)
           </a>
           <a href="#syntax" class="inline-flex items-center gap-2 text-sm text-gryneon hover:text-sky-300">
             Explore the syntax
@@ -125,7 +128,7 @@
           </a>
         </div>
         <div class="flex flex-wrap gap-3 text-[0.7rem] text-slate-400">
-          <span class="px-2 py-1 rounded-full border border-slate-700/80 bg-black/40">Zero imports – <code class="text-gryneon">gx.*</code> for alt</span>
+          <span class="px-2 py-1 rounded-full border border-slate-700/80 bg-black/40">Zero imports – <code class="text-gryneon">gx.*</code> for everything</span>
           <span class="px-2 py-1 rounded-full border border-slate-700/80 bg-black/40">Built-in CLI &amp; REPL</span>
           <span class="px-2 py-1 rounded-full border border-slate-700/80 bg-black/40">GxGUI desktop apps</span>
         </div>
@@ -163,41 +166,41 @@ Here is a joke: Why do programmers prefer dark mode? - Because light attracts bu
         <div>
           <h2 class="text-2xl md:text-3xl font-bold mb-4">What is Grynk?</h2>
           <p class="text-slate-300 text-sm md:text-base mb-4">
-            Grynk er <strong>"The Scripting Language for the Modern Internet"</strong> – et raskt, uttrykksfullt språk som 
-            prioriterer lesbarhet, produktivitet og kraftige innebygde verktøy. Det er bygget for web-API-er, AI-agenter, automasjon, 
-            sanntidsoppgaver og moderne desktop-GUI med GxGUI.
+            Grynk is <strong>"The Scripting Language for the Modern Internet"</strong> – a fast, expressive language that
+            prioritizes readability, productivity, and powerful built-in tools. It is designed for web APIs, AI agents, automation,
+            real-time tasks, and modern desktop GUIs with GxGUI.
           </p>
           <ul class="space-y-2 text-sm text-slate-300">
             <li class="flex gap-2">
               <span class="text-grylime mt-1">◆</span>
-              <span>Føles <strong>raskt som Rust</strong>, men <strong>lettlest som Python</strong>.</span>
+              <span>Feels <strong>fast like Rust</strong> but <strong>readable like Python</strong>.</span>
             </li>
             <li class="flex gap-2">
               <span class="text-grylime mt-1">◆</span>
-              <span><strong>Null imports</strong> – alt via det globale <code class="text-gryneon">gx</code>-objektet.</span>
+              <span><strong>Zero imports</strong> – everything through the global <code class="text-gryneon">gx</code> object.</span>
             </li>
             <li class="flex gap-2">
               <span class="text-grylime mt-1">◆</span>
-              <span>Innebygd <strong>CLI, REPL, prosjekt-scaffolding og VS Code-extension</strong>.</span>
+              <span>Built-in <strong>CLI, REPL, project scaffolding, and VS Code extension</strong>.</span>
             </li>
             <li class="flex gap-2">
               <span class="text-grylime mt-1">◆</span>
-              <span>Fjerner unødvendig boilerplate og symbolstøy – kun det du trenger for å bygge.</span>
+              <span>Eliminates unnecessary boilerplate and symbol noise – only what you need to build.</span>
             </li>
           </ul>
         </div>
         <div class="space-y-4 text-sm text-slate-300">
           <h3 class="text-lg font-semibold mb-2">Built for the modern stack</h3>
           <p>
-            Grynk leveres med en omfattende verktøykasse direkte i <code class="text-gryneon">gx</code>: HTTP-klient, AI-helpers, 
-            filsystem, crypto, tidsfunksjoner, datastrømmer, terminalverktøy, system-kommandoer og mer – uten ett eneste <em>import</em>.
+            Grynk ships with a comprehensive toolbox directly on <code class="text-gryneon">gx</code>: HTTP client, AI helpers,
+            filesystem, crypto, time utilities, data helpers, terminal tools, system commands and more – with zero <em>import</em> statements.
           </p>
           <p>
-            Med den innebygde <strong>GxGUI-motoren</strong> kan du lage skrivebordsapplikasjoner i noen få linjer, drevet av 
-            CustomTkinter for en moderne look out-of-the-box.
+            With the built-in <strong>GxGUI engine</strong>, you can build desktop applications in a handful of lines, powered by
+            CustomTkinter for a modern look out of the box.
           </p>
           <p>
-            Installeres enkelt via en offisiell Windows-installer, eller bygges fra kildekode / bruk standalone-binary på Linux og macOS.
+            Install easily via an official Windows installer, or build from source / use the standalone binary on Linux and macOS.
           </p>
         </div>
       </div>
@@ -215,7 +218,7 @@ Here is a joke: Why do programmers prefer dark mode? - Because light attracts bu
           <button class="feature-header" data-accordion="gx">
             <div>
               <h3 class="font-semibold text-sm mb-1">Zero-import global <code class="text-gryneon">gx</code></h3>
-              <p class="text-xs text-slate-400">Alt du trenger – web, AI, filer, crypto – på ett objekt.</p>
+              <p class="text-xs text-slate-400">Everything you need – web, AI, files, crypto – on one object.</p>
             </div>
             <span class="feature-chevron">+</span>
           </button>
@@ -236,7 +239,7 @@ Here is a joke: Why do programmers prefer dark mode? - Because light attracts bu
           <button class="feature-header" data-accordion="cli">
             <div>
               <h3 class="font-semibold text-sm mb-1">Built-in CLI &amp; REPL</h3>
-              <p class="text-xs text-slate-400">Kjør skript, start REPL, bygg prosjekter – ingen ekstra verktøy.</p>
+              <p class="text-xs text-slate-400">Run scripts, start a REPL, scaffold projects – no extra tooling.</p>
             </div>
             <span class="feature-chevron">+</span>
           </button>
@@ -257,13 +260,13 @@ Here is a joke: Why do programmers prefer dark mode? - Because light attracts bu
           <button class="feature-header" data-accordion="pipeline">
             <div>
               <h3 class="font-semibold text-sm mb-1">Data pipelines with <code class="text-gryneon">|&gt;</code></h3>
-              <p class="text-xs text-slate-400">Transformer data med lesbare, funksjonelle kjeder.</p>
+              <p class="text-xs text-slate-400">Transform data with readable, functional pipelines.</p>
             </div>
             <span class="feature-chevron">+</span>
           </button>
           <div class="feature-body" id="feature-body-pipeline">
             <p class="text-xs text-slate-300 mb-3">
-              Kombiner sortering, mapping, filtrering og utskrift i én flyt – perfekt for data- og API-responser.
+              Combine sorting, mapping, filtering, and printing into a single flow – perfect for data and API responses.
             </p>
             <button class="copy-btn" data-copy-target="code-pipeline-main">
               Copy pipeline
@@ -275,13 +278,13 @@ Here is a joke: Why do programmers prefer dark mode? - Because light attracts bu
           <button class="feature-header" data-accordion="gxgui">
             <div>
               <h3 class="font-semibold text-sm mb-1">GxGUI Desktop UI</h3>
-              <p class="text-xs text-slate-400">Lag moderne skrivebordsapper med få linjer kode.</p>
+              <p class="text-xs text-slate-400">Build modern desktop apps in just a few lines of code.</p>
             </div>
             <span class="feature-chevron">+</span>
           </button>
           <div class="feature-body" id="feature-body-gxgui">
             <p class="text-xs text-slate-300 mb-3">
-              GxGUI bruker CustomTkinter under panseret for å gi moderne look og enkel API for vinduer, knapper, labels og inputs.
+              GxGUI uses CustomTkinter under the hood for a modern look and a simple API for windows, buttons, labels, and inputs.
             </p>
             <button class="copy-btn" data-copy-target="code-gui-basic">
               Copy GUI example
@@ -293,13 +296,13 @@ Here is a joke: Why do programmers prefer dark mode? - Because light attracts bu
           <button class="feature-header" data-accordion="http">
             <div>
               <h3 class="font-semibold text-sm mb-1">HTTP + Web helpers</h3>
-              <p class="text-xs text-slate-400">Bygg API-klienter og scrapers uten ekstra biblioteker.</p>
+              <p class="text-xs text-slate-400">Build API clients and scrapers without extra libraries.</p>
             </div>
             <span class="feature-chevron">+</span>
           </button>
           <div class="feature-body" id="feature-body-http">
             <ul class="text-xs text-slate-300 space-y-1 mb-3">
-              <li><code>gx.get(url).json</code> – rask JSON-henting</li>
+              <li><code>gx.get(url).json</code> – quick JSON retrieval</li>
               <li><code>gx.post(url, data)</code> – POST-requests</li>
               <li><code>gx.scrape(url, selector)</code> – HTML-scraping</li>
             </ul>
@@ -313,15 +316,15 @@ Here is a joke: Why do programmers prefer dark mode? - Because light attracts bu
           <button class="feature-header" data-accordion="ai">
             <div>
               <h3 class="font-semibold text-sm mb-1">AI-native scripting</h3>
-              <p class="text-xs text-slate-400">Bygg AI-agenter og tools direkte i språket.</p>
+              <p class="text-xs text-slate-400">Build AI agents and tools directly in the language.</p>
             </div>
             <span class="feature-chevron">+</span>
           </button>
           <div class="feature-body" id="feature-body-ai">
             <ul class="text-xs text-slate-300 space-y-1 mb-3">
-              <li><code>gx.ai(prompt)</code> – kjør raske prompt-kall</li>
-              <li><code>gx.ai_summarize(text)</code> – kondenser tekst</li>
-              <li><code>gx.ai_code(code)</code> – AI-hjelp for kode</li>
+              <li><code>gx.ai(prompt)</code> – run quick prompt calls</li>
+              <li><code>gx.ai_summarize(text)</code> – condense text</li>
+              <li><code>gx.ai_code(code)</code> – AI help for code</li>
             </ul>
             <button class="copy-btn" data-copy-target="code-ai-basic">
               Copy AI example
@@ -336,7 +339,7 @@ Here is a joke: Why do programmers prefer dark mode? - Because light attracts bu
       <div class="flex items-center justify-between gap-4 mb-6">
         <div>
           <h2 class="text-2xl md:text-3xl font-bold mb-1">Syntax &amp; Live Examples</h2>
-          <p class="text-sm text-slate-300">Rediger Grynk-kode, kjør mock-kjøringer i nettleseren, og se hvordan språket føles.</p>
+          <p class="text-sm text-slate-300">Edit Grynk code, run mocked executions in the browser, and feel how the language behaves.</p>
         </div>
         <span class="text-[0.65rem] uppercase tracking-[0.2em] text-slate-500">Editable playgrounds</span>
       </div>
@@ -548,24 +551,35 @@ say "Session {id} has hash {hash}"</textarea>
         <div>
           <h2 class="text-2xl md:text-3xl font-bold mb-3">Install &amp; Get Started</h2>
           <p class="text-sm text-slate-300 mb-4">
-            Den anbefalte måten å installere Grynk på er via den offisielle Windows-installereren. Den setter 
-            automatisk opp CLI-verktøyet og installerer VS Code-extension slik at du får ikoner og syntax highlighting umiddelbart.
+            The recommended way to install Grynk is via the official Windows installer. It automatically sets up the CLI tool
+            and installs the VS Code extension so you get the Grynk icon and syntax highlighting right away.
           </p>
           <ol class="list-decimal list-inside text-sm text-slate-300 space-y-1 mb-4">
-            <li>Last ned <strong>Grynk_Windows_Installer.exe</strong> via knappen under.</li>
-            <li>Kjør installasjonsfilen og klikk deg gjennom veiviseren.</li>
-            <li>Åpne en terminal og kjør <code class="text-gryneon">grynk repl</code> eller <code class="text-gryneon">grynk run app.grk</code>.</li>
+            <li>Download <strong>Grynk_Windows_Installer.exe</strong> using the button below.</li>
+            <li>Run the installer and click through the wizard.</li>
+            <li>Open any terminal and run <code class="text-gryneon">grynk repl</code> or <code class="text-gryneon">grynk run app.grk</code>.</li>
           </ol>
           <a href="/downloads/Grynk_Windows_Installer.exe" download class="inline-flex items-center gap-2 rounded-full bg-grylime px-6 py-2.5 text-sm font-semibold text-slate-900 shadow-neon-lime hover:shadow-neon-cyan hover:-translate-y-0.5 transition-all mb-4">
             Download for Windows (.exe)
           </a>
 
           <div class="text-xs text-slate-400">
-            <p class="mb-1">Linux &amp; macOS kan installere Grynk på to måter:</p>
-            <ul class="list-disc list-inside space-y-1">
-              <li><strong>Standalone-binary</strong>: Last ned <code>grynk</code>-fila fra Releases, gjør den kjørbar og legg den i <code>/usr/local/bin</code>.</li>
-              <li><strong>Fra kildekode</strong>: Klon repoet og kjør <code>setup.sh</code> for å få en global <code>grynk</code>-kommando.</li>
+            <p class="mb-1 font-semibold">Linux &amp; macOS</p>
+            <p class="mb-1">You have two ways to install Grynk on Linux (and similarly on macOS):</p>
+            <ul class="list-disc list-inside space-y-1 mb-2">
+              <li>
+                <strong>Option 1 – Standalone binary (easiest)</strong><br />
+                1. Go to the Releases page and download the <code>grynk</code> file (the one without an extension).<br />
+                2. Make it executable and move it into your local bin folder so you can run it from anywhere.
+              </li>
+              <li>
+                <strong>Option 2 – Install from source</strong><br />
+                1. Clone the Grynk repository to your machine.<br />
+                2. Run the provided <code>setup.sh</code> script to automatically install dependencies and create a global <code>grynk</code> command.
+              </li>
             </ul>
+            <p class="mb-1">Once installed, you can run:</p>
+            <p><code>grynk help</code>, <code>grynk repl</code>, <code>grynk run app.grk</code> – exactly like on Windows.</p>
           </div>
         </div>
 
@@ -610,7 +624,7 @@ grynk run app.grk</code></pre>
       <div class="flex items-center justify-between gap-4 mb-4">
         <div>
           <h2 class="text-2xl md:text-3xl font-bold mb-1">API Quick Reference</h2>
-          <p class="text-sm text-slate-300">Et utvalg av de viktigste <code class="text-gryneon">gx.*</code>-metodene. Skriv for å filtrere.</p>
+          <p class="text-sm text-slate-300">A selection of the most important <code class="text-gryneon">gx.*</code> methods. Type to filter.</p>
         </div>
         <div class="w-40">
           <input id="api-search" type="text" placeholder="Search gx.*" class="w-full rounded-full bg-slate-900/80 border border-slate-700 px-3 py-1.5 text-xs placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-gryneon" />
@@ -782,12 +796,12 @@ grynk run app.grk</code></pre>
         <div>
           <h2 class="text-2xl md:text-3xl font-bold mb-3">Join the Grynk ecosystem</h2>
           <p class="text-sm text-slate-300 mb-3">
-            Grynk er et åpent kildekodeprosjekt – språket, CLI, GxGUI, og installer-verktøyene utvikles i fellesskap på GitHub.
+            Grynk is an open source project – the language, CLI, GxGUI, and installer tooling are all built in the open on GitHub.
           </p>
           <ul class="text-sm text-slate-300 space-y-1 mb-4">
-            <li>⭐ Gi prosjektet en stjerne for å vise støtte.</li>
-            <li>🐛 Rapporter bugs eller foreslå nye <code>gx.*</code>-helpers.</li>
-            <li>🧱 Bidra med eksempler, dokumentasjon eller verktøy rundt språket.</li>
+            <li>⭐ Star the project to show your support.</li>
+            <li>🐛 Report bugs or propose new <code>gx.*</code> helpers.</li>
+            <li>🧱 Contribute examples, documentation, or tools around the language.</li>
           </ul>
           <a href="https://github.com/AndreSkole/Grynk" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full border border-gryneon px-4 py-2 text-xs font-semibold text-gryneon hover:bg-gryneon/10 hover:shadow-neon-cyan transition-all">
             Visit the Grynk GitHub repo
